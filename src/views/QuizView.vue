@@ -5,9 +5,20 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const loading = ref(true);
 const page = ref(1);
+const currentSelected = ref('');
 const questions = ref([]);
+const answers = ref([])
 
 const nextQuestion = () => {
+    if (page.value < questions.value.length) {
+        answers.value[page.value - 1] = currentSelected.value;
+        page.value++;
+        currentSelected.value = '';
+        console.log(answers.value)
+    }
+    if (page.value === questions.value.length) {
+        console.log(answers.value)
+    }
     page.value++;
 }
 onMounted(() => {
@@ -40,7 +51,8 @@ onMounted(() => {
             </div>
         </div>
         <div class="flex gap-4 justify-center w-full px-8">
-            <div class="flex gap-2 px-6 py-3 rounded-2xl border border-gray-600 text-2xl group bg-secondary text-white">
+            <div @click="currentSelected = 'true'"
+                class="flex gap-2 px-6 py-3 rounded-2xl border border-gray-600 text-2xl group bg-secondary text-white">
                 <span>TRUE</span>
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -50,7 +62,8 @@ onMounted(() => {
                     </svg>
                 </span>
             </div>
-            <div class="flex gap-2 px-6 py-3 rounded-2xl border border-gray-600 text-2xl group">
+            <div @click="currentSelected = 'false'"
+                class="flex gap-2 px-6 py-3 rounded-2xl border border-gray-600 text-2xl group">
                 <span>FALSE</span>
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
