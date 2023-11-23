@@ -1,18 +1,19 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const showDifficulty = ref('')
 
-const selectDifficulty = (value) => {
-  // difficultySelected.value = value
-  // categorySelected.value = value
+const selectDifficulty = (cat, diff) => {
   showDifficulty.value = ''
+  router.push({ name: 'quiz', params: { category: cat, difficulty: diff } })
 }
 </script>
 
 <template>
   <main>
-    <div class="mt-4 p-4">
+    <div class="mt-[116px] p-4">
       <h1 class="text-4xl">Hi, Welcome to Kooiz!</h1>
       <p class="text-gray-400 mt-2">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore commodi rerum quae,
@@ -32,7 +33,7 @@ const selectDifficulty = (value) => {
         </svg>
       </div>
     </div>
-    <div class="mt-2 p-4">
+    <div class="p-4">
       <div
         class="relative w-72 h-80 bg-cover bg-no-repeat bg-center border-primary rounded-2xl shadow-sm overflow-hidden hover:shadow-md"
         style="background-image: url('https://images.pexels.com/photos/47547/squirrel-animal-cute-rodents-47547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
@@ -45,11 +46,11 @@ const selectDifficulty = (value) => {
           </div>
           <div v-show="showDifficulty === 1" class="absolute bottom-0 z-4 w-full bg-light/90 rounded-2xl text-xl py-4">
             <h4 class="text-gray-600 font-bold pb-2 px-4 uppercase">Select Difficulty</h4>
-            <div @click="selectDifficulty('easy')"
+            <div @click="selectDifficulty('animal', 'easy')"
               class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">Easy</div>
-            <div @click="selectDifficulty('medium')"
+            <div @click="selectDifficulty('animal', 'medium')"
               class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">Medium</div>
-            <div @click="selectDifficulty('hard')"
+            <div @click="selectDifficulty('animal', 'hard')"
               class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">hard</div>
           </div>
         </div>

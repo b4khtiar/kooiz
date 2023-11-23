@@ -11,7 +11,7 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: '/quiz',
+			path: '/quiz&:category&:difficulty',
 			name: 'quiz',
 			component: QuizView,
 		},
