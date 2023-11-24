@@ -38,6 +38,10 @@ const handleShare = async () => {
         console.error("Share failed:", err.message);
     }
 }
+const showAbout = () => {
+    router.push({ name: 'about' });
+}
+
 </script>
 <template>
     <div class="flex flex-col items-center pt-32">
@@ -71,8 +75,13 @@ const handleShare = async () => {
             </div>
         </div>
 
-        <div class="mt-10 px-4 py-6 text-center">
-            🚀 novabyte.dev
+        <div class="flex justify-center gap-6 mt-10 px-4 py-6">
+            <span>
+                🚀 novabyte.dev
+            </span>
+            <span @click="showAbout">
+                About
+            </span>
         </div>
     </div>
 </template>

@@ -13,6 +13,9 @@ const difficultyPicked = ref('');
 const startQuiz = () => {
   router.push({ name: 'quiz', params: { category: categoryPicked.value.id, difficulty: difficultyPicked.value } });
 }
+const showAbout = () => {
+  router.push({ name: 'about' });
+}
 </script>
 
 <template>
@@ -95,8 +98,13 @@ const startQuiz = () => {
         </span>
       </div>
 
-      <div class="mt-10 px-4 py-6 text-center">
-        🚀 novabyte.dev
+      <div class="flex justify-center gap-6 mt-10 px-4 py-6">
+        <span>
+          🚀 novabyte.dev
+        </span>
+        <span @click="showAbout">
+          About
+        </span>
       </div>
     </div>
   </main>
