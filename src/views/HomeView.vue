@@ -1,13 +1,17 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useTriviaStore } from '../stores/trivia.js';
 
-const router = useRouter()
-const showDifficulty = ref('')
-
-const selectDifficulty = (cat, diff) => {
-  showDifficulty.value = ''
-  router.push({ name: 'quiz', params: { category: cat, difficulty: diff } })
+const router = useRouter();
+const store = useTriviaStore();
+const categories = store.categories;
+const showCategory = ref(false);
+const showDifficulty = ref(false);
+const categoryPicked = ref('');
+const difficultyPicked = ref('');
+const startQuiz = () => {
+  router.push({ name: 'quiz', params: { category: categoryPicked.value, difficulty: difficultyPicked.value } });
 }
 </script>
 
@@ -15,7 +19,7 @@ const selectDifficulty = (cat, diff) => {
   <main>
     <div class="mt-[116px] p-4">
       <h1 class="text-4xl">Hi, Welcome to Kooiz!</h1>
-      <p class="text-gray-400 mt-2">
+      <p class="text-gray-600 mt-2">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore commodi rerum quae,
         ab facilis nemo error.
       </p>
@@ -33,28 +37,67 @@ const selectDifficulty = (cat, diff) => {
         </svg>
       </div>
     </div>
-    <div class="p-4">
-      <div
-        class="relative w-72 h-80 bg-cover bg-no-repeat bg-center border-primary rounded-2xl shadow-sm overflow-hidden hover:shadow-md"
-        style="background-image: url('https://images.pexels.com/photos/47547/squirrel-animal-cute-rodents-47547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
-        <div class="absolute bottom-0 right-0 z-2 w-full h-full bg-dark/30 hover:bg-dark/10 duration-300 ease-in-out">
-          <h5 class="px-4 py-2 bg-primary rounded-br-2xl max-w-fit text-lg font-bold tracking-wider">ANIMALS</h5>
 
-          <div v-show="!showDifficulty" class="absolute bottom-0 w-full items-center">
-            <button @click="showDifficulty = 1"
-              class="px-8 py-3 my-auto bg-dark/50 backdrop-blur-sm w-full text-2xl text-light font-bold tracking-wider">Select</button>
-          </div>
-          <div v-show="showDifficulty === 1" class="absolute bottom-0 z-4 w-full bg-light/90 rounded-2xl text-xl py-4">
-            <h4 class="text-gray-600 font-bold pb-2 px-4 uppercase">Select Difficulty</h4>
-            <div @click="selectDifficulty('animal', 'easy')"
-              class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">Easy</div>
-            <div @click="selectDifficulty('animal', 'medium')"
-              class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">Medium</div>
-            <div @click="selectDifficulty('animal', 'hard')"
-              class="py-3 px-4 mt-1 font-bold tracking-wide hover:border-b hover:border-primary">hard</div>
-          </div>
-        </div>
+    <div class="relative px-4">
+      <div @click="showCategory = !showCategory"
+        class="flex justify-between bg-gray-100 rounded-lg p-4 border border-b-4 border-r-4 border-gray-400 hover:cursor-pointer">
+        <span>{{ categoryPicked ? categoryPicked.name : 'Select Category' }}</span>
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+
+        </span>
       </div>
+      <ul class="absolute top-16 left-0 z-10 w-full max-w-sm px-4">
+        <div v-if="showCategory" class="h-80 rounded-lg border overflow-y-scroll">
+          <li v-for="category in categories" @click="categoryPicked = category, showCategory = false"
+            class="p-4 bg-gray-100 hover:bg-gray-300">{{ category.name }}</li>
+        </div>
+      </ul>
+    </div>
+
+    <div class="relative px-4 mt-4">
+      <div @click="showDifficulty = !showDifficulty"
+        class="flex justify-between bg-gray-100 rounded-lg p-4 border border-b-4 border-r-4 border-gray-400 hover:cursor-pointer">
+        <span>{{ difficultyPicked ? difficultyPicked : 'Select Difficulty' }}</span>
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </span>
+      </div>
+      <ul class="absolute top-16 left-0 z-2 w-full max-w-sm px-4">
+        <div v-if="showDifficulty" class="h-80 rounded-lg border overflow-y-scroll">
+          <li @click="difficultyPicked = 'easy', showDifficulty = false" class="p-4 bg-gray-100 hover:bg-gray-300">Easy
+          </li>
+          <li @click="difficultyPicked = 'medium', showDifficulty = false" class="p-4 bg-gray-100 hover:bg-gray-300">
+            Medium
+          </li>
+          <li @click="difficultyPicked = 'hard', showDifficulty = false" class="p-4 bg-gray-100 hover:bg-gray-300">Hard
+          </li>
+        </div>
+      </ul>
+    </div>
+
+    <div class="px-4 my-4">
+      <div @click="startQuiz()"
+        class="w-fit flex gap-2 bg-tertiary text-light font-medium rounded-lg p-4 border border-b-4 border-r-4 border-rose-700 hover:cursor-pointer">
+        <span>Start Quiz</span>
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 z-1  px-4 py-8 text-center">
+      🚀 novabyte.dev
     </div>
   </main>
 </template>
