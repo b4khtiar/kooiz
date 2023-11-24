@@ -1,6 +1,6 @@
 # kooiz
 
-This template should help get you started developing with Vue 3 in Vite.
+Simple Trivia Quiz app built with Vue 3 & Open Trivia Database.
 
 ## Recommended IDE Setup
 

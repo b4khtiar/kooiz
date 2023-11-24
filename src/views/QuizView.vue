@@ -1,26 +1,25 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import Question from '../components/Question.vue';
 
 const route = useRoute();
 const router = useRouter();
 const loading = ref(true);
 const page = ref(1);
-const currentSelected = ref('');
 const questions = ref([]);
 const answers = ref([])
 const score = ref(0);
 
-const nextQuestion = () => {
+const nextQuestion = (answer) => {
     if (page.value < questions.value.length) {
-        answers.value[page.value - 1] = currentSelected.value;
+        answers.value[page.value - 1] = answer;
         page.value++;
-        currentSelected.value = '';
-        console.log(answers.value)
+        return
     }
     if (page.value === questions.value.length) {
-        answers.value[page.value - 1] = currentSelected.value;
-        scoring()
+        answers.value[page.value - 1] = answer;
+        return scoring()
     }
 }
 const scoring = () => {
@@ -30,9 +29,7 @@ const scoring = () => {
             score.value += 10
         }
     }
-    console.log(score.value)
-    // router.push({ name: 'result', params: { score: score.value } })
-    return
+    router.push({ name: 'results', params: { score: score.value, category: route.params.category, difficulty: route.params.difficulty } })
 
 }
 const decodeHtml = (html) => {
@@ -42,95 +39,86 @@ const decodeHtml = (html) => {
 }
 
 onMounted(() => {
+    fetchData()
+})
+
+const fetchData = async () => {
     if (!route.params.difficulty && !route.params.category) {
-        fetch(`https://opentdb.com/api.php?amount=10&type=boolean`)
-            .then(res => res.json())
-            .then(data => {
-                questions.value = data.results;
-                loading.value = false;
-            })
+        try {
+            fetch(`https://opentdb.com/api.php?amount=10&type=boolean`)
+                .then(res => res.json())
+                .then(data => {
+                    questions.value = data.results;
+                    loading.value = false;
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
     if (route.params.category && !route.params.difficulty) {
-        fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&type=boolean`)
-            .then(res => res.json())
-            .then(data => {
-                questions.value = data.results;
-                loading.value = false;
-            })
-        console.log('difficulty kosong')
+        try {
+            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&type=boolean`)
+                .then(res => res.json())
+                .then(data => {
+                    questions.value = data.results;
+                    loading.value = false;
+                })
+            console.log('difficulty kosong')
+        } catch (error) {
+            console.log(error)
+        }
     }
     if (route.params.difficulty && !route.params.category) {
-        fetch(`https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}&type=boolean`)
-            .then(res => res.json())
-            .then(data => {
-                questions.value = data.results;
-                loading.value = false;
-            })
-        console.log('category kosong')
+        try {
+            fetch(`https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}&type=boolean`)
+                .then(res => res.json())
+                .then(data => {
+                    questions.value = data.results;
+                    loading.value = false;
+                })
+            console.log('category kosong')
+        } catch (error) {
+            console.log(error)
+        }
     }
     if (route.params.difficulty && route.params.category) {
-        fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}&type=boolean`)
-            .then(res => res.json())
-            .then(data => {
-                questions.value = data.results;
-                loading.value = false;
-            })
+        try {
+            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}&type=boolean`)
+                .then(res => res.json())
+                .then(data => {
+                    questions.value = data.results;
+                    loading.value = false;
+                })
+        } catch (error) {
+            console.log(error)
+        }
     }
-})
+}
+
+const goHome = () => {
+    router.push({ name: 'home' })
+}
 </script>
 <template>
-    <div v-for="(q, index) in questions" key="index" v-show="!loading && page === index + 1"
-        class="w-full pt-24 px-2 md:px-0">
-        <div class="w-full max-w-xl mx-auto my-12 md:my-6 rounded-lg border border-b-4 border-r-4 border-gray-400">
-            <div class="flex justify-between text-stone-500 px-4 pt-2">
-                <div class="text-sm"><span class="hidden md:inline">Question</span> {{ page }}</div>
-                <div class="text-sm">{{ q.category }}</div>
-            </div>
-            <div class="h-72 md:h-52 flex justify-center align-middle">
-                <p class="text-xl text-center font-medium px-4 my-auto tracking-wide leading-relaxed">
-                    {{ decodeHtml(q.question) }}
-                </p>
-            </div>
-        </div>
-
-        <div v-if="q.type === 'boolean'" class="flex gap-4 justify-center w-full px-8 text-gray-600">
-            <div @click="currentSelected = 'true'"
-                class="flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group">
-                <span>TRUE</span>
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-            </div>
-            <div @click="currentSelected = 'false'"
-                class="flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group">
-                <span>FALSE</span>
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </span>
-            </div>
-        </div>
+    <div v-show="!loading">
+        <TransitionGroup name="fade">
+            <Question v-for="(q, index) in questions" :key="index" v-show="page === index + 1" :question-data="q"
+                :page="page" @answer="nextQuestion" />
+        </TransitionGroup>
     </div>
-    <div class="w-full mt-12 md:mt-4">
 
+    <div class="w-full mt-12 md:mt-4">
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
             <div class="flex gap-10 px-8 ">
-                <div class="text-dark">
+                <div @click="goHome" class="text-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-8 h-8">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                     </svg>
                 </div>
-                <div @click="nextQuestion" class="text-dark text-2xl flex gap-2">
-                    Next
+                <div @click="nextQuestion('Skipped')" class="text-gray-500 text-xl flex gap-2">
+                    Skip
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-8 h-8">
@@ -152,4 +140,30 @@ onMounted(() => {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active {
+    transition: opacity 0.5s ease-in-out;
+    animation-delay: 300ms;
+}
+
+.fade-leave-active {
+    transition: opacity 300ms ease-in;
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+    position: relative;
+    opacity: 1;
+}
+</style>

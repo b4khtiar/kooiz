@@ -11,7 +11,7 @@ const showDifficulty = ref(false);
 const categoryPicked = ref('');
 const difficultyPicked = ref('');
 const startQuiz = () => {
-  router.push({ name: 'quiz', params: { category: categoryPicked.value, difficulty: difficultyPicked.value } });
+  router.push({ name: 'quiz', params: { category: categoryPicked.value.id, difficulty: difficultyPicked.value } });
 }
 </script>
 
@@ -20,15 +20,15 @@ const startQuiz = () => {
     <div class="mt-[116px] p-4">
       <h1 class="text-4xl">Hi, Welcome to Kooiz!</h1>
       <p class="text-gray-600 mt-2">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore commodi rerum quae,
-        ab facilis nemo error.
+        The ultimate trivia experience! Challenge yourself with a myriad of intriguing questions and
+        explore fascinating facts. Get ready to laugh, learn, and let the good times roll!
       </p>
     </div>
     <div class="flex justify-between align-middle mt-4 px-4">
       <div class="py-2">
-        <h3 class="text-xl text-gray-600 font-bold tracking-wide">PICK CATEGORY</h3>
+        <h3 class="text-xl text-gray-600 font-bold tracking-wide">SET YOUR PREFERENCES</h3>
       </div>
-      <div class="p-2 rounded-xl hover:bg-primary hover:text-gray-50">
+      <div class="p-2 rounded-xl hover:bg-tertiary hover:text-gray-50">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -69,8 +69,8 @@ const startQuiz = () => {
           </svg>
         </span>
       </div>
-      <ul class="absolute top-16 left-0 z-2 w-full max-w-sm px-4">
-        <div v-if="showDifficulty" class="h-80 rounded-lg border overflow-y-scroll">
+      <ul class="absolute top-16 left-0 z-[8] w-full max-w-sm px-4">
+        <div v-if="showDifficulty" class=" rounded-lg border">
           <li @click="difficultyPicked = 'easy', showDifficulty = false" class="p-4 bg-gray-100 hover:bg-gray-300">Easy
           </li>
           <li @click="difficultyPicked = 'medium', showDifficulty = false" class="p-4 bg-gray-100 hover:bg-gray-300">
@@ -94,10 +94,10 @@ const startQuiz = () => {
           </svg>
         </span>
       </div>
-    </div>
 
-    <div class="absolute bottom-0 z-1  px-4 py-8 text-center">
-      🚀 novabyte.dev
+      <div class="mt-10 px-4 py-6 text-center">
+        🚀 novabyte.dev
+      </div>
     </div>
   </main>
 </template>
