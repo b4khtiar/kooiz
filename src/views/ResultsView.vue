@@ -1,11 +1,17 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
+import { useTriviaStore } from '../stores/trivia';
 
 const route = useRoute()
 const router = useRouter()
+const triviaStore = useTriviaStore()
 const score = ref(route.params.score)
-const category = ref(route.params.category)
+const categoryNum = ref(route.params.category)
+// find the category name
+const category = computed(() => {
+    return triviaStore.categories.find(c => c.id == categoryNum.value)?.name
+})
 const difficulty = ref(route.params.difficulty)
 const greeting = computed(() => {
     if (score.value >= 70) {
@@ -22,7 +28,7 @@ const goHome = () => {
     router.push({ name: 'home' })
 }
 if (!route.params.category) {
-    category.value = 'random'
+    category.value = 'random category'
 }
 if (!route.params.difficulty) {
     difficulty.value = 'any'
@@ -54,7 +60,7 @@ const showAbout = () => {
             <img v-else src="/assets/retry.png" alt="retry">
         </figure>
         <h1 class="text-5xl text-gray-800 font-semibold">{{ score }}</h1>
-        <h1 class="text-center font bold mt-4 px-6">You can answer {{ score }}% questions in {{ category }} category with
+        <h1 class="text-center font bold mt-4 px-6">You can answer {{ score }}% questions in {{ category }} with
             {{ difficulty }} difficulty.</h1>
 
         <div class="px-4 my-4">
