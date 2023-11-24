@@ -8,7 +8,6 @@ const router = useRouter()
 const triviaStore = useTriviaStore()
 const score = ref(route.params.score)
 const categoryNum = ref(route.params.category)
-// find the category name
 const category = computed(() => {
     if (!categoryNum.value) {
         return 'random category'
@@ -55,8 +54,8 @@ const showAbout = () => {
         <h1 class="text-3xl">Your Score</h1>
         <figure class="w-[180px] h-[180px]">
             <img v-if="score >= 70" src="/assets/medal.png" alt="medal">
-            <img v-else-if="score >= 40" src="/assets/flag.png" alt="flag">
-            <img v-else-if="score >= 10" src="/assets/worker.png" alt="work">
+            <img v-else-if="score >= 40" src="/assets/silver.png" alt="flag">
+            <img v-else-if="score >= 10" src="/assets/badge-1.png" alt="work">
             <img v-else src="/assets/retry.png" alt="retry">
         </figure>
         <h1 class="text-5xl text-gray-800 font-semibold">{{ score }}</h1>

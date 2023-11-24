@@ -1,10 +1,11 @@
 <template>
   <div class="mt-[124px] px-4">
-    <h1 class="text-5xl">About KooiZ</h1>
-    <p class="italic font-light">read: quiz</p>
-    <p class="py-4">KooiZ is a fun trivia game made with Vue 3 and Open Trivia DB.</p>
+    <h1 class="text-5xl">About</h1>
+    <p class="py-5">KooiZ is a fun trivia game made with Vue 3 and Open Trivia DB.</p>
 
-    <p class="mt-8">Visit <a href="https://opentdb.com/">Open Trivia DB</a> for more trivia questions.</p>
+    <p class="mt-8">Visit <a href="https://opentdb.com/">Open TDB</a> for more trivia questions.</p>
+    <p>Image from <a href="https://www.figma.com/@parth_atara">parth_atara</a> and <a
+        href="https://www.pngrepo.com/">pngrepo</a>.</p>
     <p>Visit <a href="https://vuejs.org/">Vue 3</a> for javascript framework.</p>
     <p>Visit <a href="https://tailwindcss.com/">Tailwind CSS</a> for css framework.</p>
     <p>Visit <a href="https://github.com/b4khtiar/kooiz">Github</a> for Code.</p>

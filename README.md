@@ -1,6 +1,14 @@
-# kooiz
+# KooiZ
 
-Simple Trivia Quiz app built with Vue 3 & Open Trivia Database.
+KooiZ is a fun trivia game made with Vue 3 and Open Trivia DB.
+
+Visit [Open TDB](https://opentdb.com/) for trivia questions & API Docs.
+
+Image from [parth_atara](https://www.figma.com/@parth_atara) and [pngrepo](https://www.pngrepo.com/).
+
+Visit [Vue 3](https://vuejs.org/) for the JavaScript framework.
+
+Visit [Tailwind CSS](https://tailwindcss.com/) for the CSS framework.
 
 ## Recommended IDE Setup
 
