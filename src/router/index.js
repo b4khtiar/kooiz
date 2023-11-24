@@ -16,7 +16,7 @@ const router = createRouter({
 			component: QuizView,
 		},
 		{
-			path: '/results&score=:score&:category=:category?&:difficulty=:difficulty?',
+			path: '/results&score=:score&category=:category?&difficulty=:difficulty?',
 			name: 'results',
 			component: () => import('../views/ResultsView.vue'),
 		},

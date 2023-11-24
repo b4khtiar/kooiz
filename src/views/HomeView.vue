@@ -102,7 +102,7 @@ const showAbout = () => {
         <span>
           🚀 novabyte.dev
         </span>
-        <span @click="showAbout">
+        <span @click="showAbout" class="underline hover:cursor-pointer">
           About
         </span>
       </div>
