@@ -10,6 +10,9 @@ const score = ref(route.params.score)
 const categoryNum = ref(route.params.category)
 // find the category name
 const category = computed(() => {
+    if (!categoryNum.value) {
+        return 'random category'
+    }
     return triviaStore.categories.find(c => c.id == categoryNum.value)?.name
 })
 const difficulty = ref(route.params.difficulty)
@@ -26,9 +29,6 @@ const greeting = computed(() => {
 })
 const goHome = () => {
     router.push({ name: 'home' })
-}
-if (!route.params.category) {
-    category.value = 'random category'
 }
 if (!route.params.difficulty) {
     difficulty.value = 'any'
