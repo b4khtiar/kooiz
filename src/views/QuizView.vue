@@ -38,7 +38,7 @@ onMounted(() => {
 const fetchData = async () => {
     if (!route.params.difficulty && !route.params.category) {
         try {
-            fetch(`https://opentdb.com/api.php?amount=10&type=boolean`)
+            fetch(`https://opentdb.com/api.php?amount=10`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.response_code === 1) {
@@ -55,7 +55,7 @@ const fetchData = async () => {
     }
     if (route.params.category && !route.params.difficulty) {
         try {
-            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&type=boolean`)
+            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.response_code === 1) {
@@ -73,7 +73,7 @@ const fetchData = async () => {
     }
     if (route.params.difficulty && !route.params.category) {
         try {
-            fetch(`https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}&type=boolean`)
+            fetch(`https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.response_code === 1) {
@@ -91,7 +91,7 @@ const fetchData = async () => {
     }
     if (route.params.difficulty && route.params.category) {
         try {
-            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}&type=boolean`)
+            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.response_code === 1) {

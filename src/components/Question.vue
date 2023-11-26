@@ -3,6 +3,12 @@ import { ref, computed, onMounted } from 'vue'
 const props = defineProps(['questionData', 'page'])
 const emit = defineEmits(['answer', 'nextPage'])
 const page = ref(props.page)
+const randomizeAnswers = computed(() => {
+    let answerOptions = props.questionData.incorrect_answers
+    answerOptions.push(props.questionData.correct_answer)
+    return answerOptions.sort(() => Math.random() - 0.5)
+})
+
 const decodeHtml = (html) => {
     var txt = document.createElement("textarea");
     txt.innerHTML = html;
@@ -62,17 +68,25 @@ onMounted(() => {
             </div>
         </div>
 
-        <div v-if="questionData.type === 'boolean'" class="flex gap-6 justify-center w-full px-8 text-gray-600">
-            <div v-if="!selectedAnswer" @click="selectAnswer('True')"
-                class="flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
-                <span>TRUE</span>
+        <div class="w-full max-w-xl mx-auto text-gray-600">
+            <div v-if="questionData.type === 'boolean' && !selectedAnswer" class="flex gap-6 justify-center ">
+                <div @click="selectAnswer('True')"
+                    class="px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    <span>TRUE</span>
+                </div>
+                <div @click="selectAnswer('False')"
+                    class="px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    <span>FALSE</span>
+                </div>
             </div>
-            <div v-if="!selectedAnswer" @click="selectAnswer('False')"
-                class="flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
-                <span>FALSE</span>
+            <div v-if="questionData.type === 'multiple' && !selectedAnswer" class="grid grid-cols-2 gap-2 justify-center">
+                <div v-for="answer, index in randomizeAnswers" :key="index" @click="selectAnswer(answer)"
+                    class="px-3 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    <span>{{ decodeHtml(answer) }}</span>
+                </div>
             </div>
             <div v-if="selectedAnswer" @click="nextPage"
-                class="flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                class="w-fit mx-auto flex gap-2 px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
                 <span>{{ page === 10 ? 'Finish' : 'Next Question' }}</span>
                 <span>
                     <span>

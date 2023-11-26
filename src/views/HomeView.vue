@@ -27,11 +27,12 @@ const showAbout = () => {
         explore fascinating facts. Get ready to laugh, learn, and let the good times roll!
       </p>
     </div>
-    <div class="flex justify-between align-middle mt-4 px-4">
+    <div class="flex justify-between mt-3 px-4">
       <div class="py-2">
-        <h3 class="text-xl text-gray-600 font-bold tracking-wide">SET YOUR PREFERENCES</h3>
+        <h3 class="text-lg text-gray-600 font-bold tracking-wide">SET YOUR PREFERENCES</h3>
+        <p class="text-gray-600 text-sm">leave blank to get random.</p>
       </div>
-      <div class="p-2 rounded-xl hover:bg-tertiary hover:text-gray-50">
+      <div class="p-2 rounded-xl">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round"
@@ -87,8 +88,8 @@ const showAbout = () => {
 
     <div class="px-4 my-4">
       <div @click="startQuiz()"
-        class="w-fit flex gap-2 bg-tertiary text-light font-medium rounded-lg p-4 border border-b-4 border-r-4 border-rose-700 hover:cursor-pointer">
-        <span>Start Quiz</span>
+        class="w-fit flex gap-3 bg-tertiary text-light font-semibold rounded-lg p-4 border border-b-4 border-r-4 border-rose-700/60 hover:cursor-pointer">
+        <span>Start KooiZ</span>
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
