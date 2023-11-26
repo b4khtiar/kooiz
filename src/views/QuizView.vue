@@ -13,7 +13,6 @@ const score = ref(0);
 
 const addScore = (val) => {
     score.value += val
-    console.log(score.value)
 }
 const nextQuestion = (answer) => {
     if (page.value < questions.value.length) {
@@ -66,7 +65,6 @@ const fetchData = async () => {
                     questions.value = data.results;
                     loading.value = false;
                 })
-            console.log('difficulty kosong')
         } catch (error) {
             console.log(error)
         }
