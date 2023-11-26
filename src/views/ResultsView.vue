@@ -74,7 +74,7 @@ const showAbout = () => {
 </script>
 <template>
     <div class="flex flex-col items-center pt-32">
-        <h1 class="text-4xl text-gray-600 font-bold heartbeat">{{ greeting.title }}</h1>
+        <h1 class="text-4xl text-gray-600 text-center font-bold heartbeat">{{ greeting.title }}</h1>
         <h1 class="text-3xl">Your Score</h1>
         <figure class="w-[180px] h-[180px] p-2">
             <img :src="greeting.img" class="bounce-top">

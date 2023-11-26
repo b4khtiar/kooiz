@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Question from '../components/Question.vue';
 
@@ -33,76 +33,35 @@ const decodeHtml = (html) => {
 onMounted(() => {
     fetchData()
 })
-
-const fetchData = async () => {
+const fetchURL = computed(() => {
     if (!route.params.difficulty && !route.params.category) {
-        try {
-            fetch(`https://opentdb.com/api.php?amount=10`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.response_code === 1) {
-                        loading.value = false
-                        showAlert.value = true
-                        return
-                    }
-                    questions.value = data.results;
-                    loading.value = false;
-                })
-        } catch (error) {
-            console.log(error)
-        }
+        return `https://opentdb.com/api.php?amount=10`
     }
     if (route.params.category && !route.params.difficulty) {
-        try {
-            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.response_code === 1) {
-                        loading.value = false
-                        showAlert.value = true
-                        return
-                    }
-                    questions.value = data.results;
-                    loading.value = false;
-                })
-        } catch (error) {
-            console.log(error)
-        }
+        return `https://opentdb.com/api.php?amount=10&category=${route.params.category}`
     }
     if (route.params.difficulty && !route.params.category) {
-        try {
-            fetch(`https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.response_code === 1) {
-                        loading.value = false
-                        showAlert.value = true
-                        return
-                    }
-                    questions.value = data.results;
-                    loading.value = false;
-                })
-            console.log('category kosong')
-        } catch (error) {
-            console.log(error)
-        }
+        return `https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}`
     }
-    if (route.params.difficulty && route.params.category) {
-        try {
-            fetch(`https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.response_code === 1) {
-                        loading.value = false
-                        showAlert.value = true
-                        return
-                    }
-                    questions.value = data.results;
-                    loading.value = false;
-                })
-        } catch (error) {
-            console.log(error)
-        }
+    if (route.params.category && route.params.difficulty) {
+        return `https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}`
+    }
+})
+const fetchData = async () => {
+    try {
+        fetch(fetchURL.value)
+            .then(res => res.json())
+            .then(data => {
+                if (data.response_code === 1) {
+                    loading.value = false
+                    showAlert.value = true
+                    return
+                }
+                questions.value = data.results;
+                loading.value = false;
+            })
+    } catch (error) {
+        console.log(error)
     }
 }
 
