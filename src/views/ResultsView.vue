@@ -42,7 +42,7 @@ const greeting = computed(() => {
         return greetings[0]
     } else if (score.value >= 70) {
         return greetings[1]
-    } else if (score.value >= 40) {
+    } else if (score.value >= 50) {
         return greetings[2]
     } else if (score.value >= 10) {
         return greetings[3]
@@ -54,7 +54,7 @@ const goHome = () => {
     router.push({ name: 'home' })
 }
 if (!route.params.difficulty) {
-    difficulty.value = 'any'
+    difficulty.value = 'mixed'
 }
 const handleShare = async () => {
     try {
