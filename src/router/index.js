@@ -18,7 +18,7 @@ const router = createRouter({
 		{
 			path: '/results&score=:score&category=:category?&difficulty=:difficulty?',
 			name: 'results',
-			component: import('../views/ResultsView.vue'),
+			component: () => import('../views/ResultsView.vue'),
 		},
 		{
 			path: '/about',
