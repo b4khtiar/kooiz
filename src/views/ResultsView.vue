@@ -1,8 +1,10 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useTriviaStore } from '../stores/trivia';
+import Loading from '../components/Loading.vue';
 
+const loading = ref(true)
 const route = useRoute()
 const router = useRouter()
 const triviaStore = useTriviaStore()
@@ -71,13 +73,17 @@ const showAbout = () => {
     router.push({ name: 'about' });
 }
 
+onMounted(() => {
+    loading.value = false
+})
 </script>
+
 <template>
     <div class="flex flex-col items-center pt-32">
         <h1 class="text-4xl text-gray-600 text-center font-bold heartbeat">{{ greeting.title }}</h1>
         <h1 class="text-3xl">Your Score</h1>
-        <figure class="w-[180px] h-[180px] p-2">
-            <img :src="greeting.img" class="bounce-top">
+        <figure class="h-[196px] p-2">
+            <img :src="greeting.img" width="180" class="bounce-top">
         </figure>
         <h1 class=" text-5xl text-gray-800 font-semibold">{{ score }}</h1>
         <h1 class="text-center font bold mt-4 px-6">You can answer {{ score }}% questions in {{ category }} with
@@ -111,7 +117,10 @@ const showAbout = () => {
             </span>
         </div>
     </div>
+
+    <Loading v-if="loading" />
 </template>
+
 <style scoped>
 .bounce-top {
     -webkit-animation: bounce-top 0.9s both;

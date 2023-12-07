@@ -68,7 +68,7 @@ onMounted(() => {
             </div>
         </div>
 
-        <div class="w-full max-w-xl mx-auto text-gray-600">
+        <div class="w-full max-w-xl min-h-[114px] mx-auto text-gray-600">
             <div v-if="questionData.type === 'boolean' && !selectedAnswer" class="flex gap-6 justify-center ">
                 <div @click="selectAnswer('True')"
                     class="px-6 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 text-xl group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
