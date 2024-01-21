@@ -25,13 +25,10 @@ const nextQuestion = (answer) => {
         router.push({ name: 'results', params: { score: score.value, category: route.params.category, difficulty: route.params.difficulty } })
     }
 }
-const decodeHtml = (html) => {
-    var txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-}
-
 onMounted(() => {
+    if (questions.value.length > 0) {
+        return
+    }
     fetchData()
 })
 const fetchURL = computed(() => {
@@ -49,8 +46,9 @@ const fetchURL = computed(() => {
     }
 })
 const fetchData = async () => {
+    let URL = fetchURL.value
     try {
-        fetch(fetchURL.value)
+        fetch(URL)
             .then(res => res.json())
             .then(data => {
                 if (data.response_code === 1) {
@@ -62,7 +60,7 @@ const fetchData = async () => {
                 loading.value = false;
             })
     } catch (error) {
-        console.log(error)
+        showAlert.value = true
     }
 }
 
@@ -77,7 +75,6 @@ const goHome = () => {
                 :page="index + 1" @answer="addScore" @next-page="nextQuestion" />
         </TransitionGroup>
     </div>
-
     <div v-if="showAlert" class="w-full mt-32 p-6">
         <div
             class="w-full max-w-md mx-auto px-8 py-4 bg-white text-center rounded-lg border border-b-4 border-r-4 border-gray-400">

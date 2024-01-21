@@ -2,12 +2,13 @@
 import { ref, computed, onMounted } from 'vue'
 const props = defineProps(['questionData', 'page'])
 const emit = defineEmits(['answer', 'nextPage'])
-const page = ref(props.page)
-const randomizeAnswers = computed(() => {
+const page = ref(1)
+const options = ref([])
+const randomizeAnswers = () => {
     let answerOptions = props.questionData.incorrect_answers
     answerOptions.push(props.questionData.correct_answer)
-    return answerOptions.sort(() => Math.random() - 0.5)
-})
+    options.value = answerOptions.sort(() => Math.random() - 0.5)
+}
 
 const decodeHtml = (html) => {
     var txt = document.createElement("textarea");
@@ -29,7 +30,9 @@ const nextPage = () => {
     emit('nextPage')
 }
 onMounted(() => {
+    randomizeAnswers()
     selectedAnswer.value = ''
+    page.value = props.page
 })
 </script>
 <template>
@@ -80,7 +83,7 @@ onMounted(() => {
                 </div>
             </div>
             <div v-if="questionData.type === 'multiple' && !selectedAnswer" class="grid grid-cols-2 gap-2 justify-center">
-                <div v-for="answer, index in randomizeAnswers" :key="index" @click="selectAnswer(answer)"
+                <div v-for="answer, index in options" :key="index" @click="selectAnswer(answer)"
                     class="px-3 py-3 rounded-lg border border-b-4 border-r-4 border-gray-400 group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
                     <span>{{ decodeHtml(answer) }}</span>
                 </div>
