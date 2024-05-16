@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import Question from '../components/Question.vue';
-import Loading from '../components/Loading.vue';
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import Question from "@/components/Question.vue";
+import Loading from "@/components/Loading.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -13,60 +13,67 @@ const questions = ref([]);
 const score = ref(0);
 
 const addScore = (val) => {
-    score.value += val
-}
+	score.value += val;
+};
 const nextQuestion = (answer) => {
-    if (page.value < questions.value.length) {
-        page.value++;
-        return
-    }
-    if (page.value === questions.value.length) {
-        loading.value = true
-        router.push({ name: 'results', params: { score: score.value, category: route.params.category, difficulty: route.params.difficulty } })
-    }
-}
+	if (page.value < questions.value.length) {
+		page.value++;
+		return;
+	}
+	if (page.value === questions.value.length) {
+		loading.value = true;
+		router.push({
+			name: "results",
+			params: {
+				score: score.value,
+				category: route.params.category,
+				difficulty: route.params.difficulty,
+			},
+		});
+	}
+};
 onMounted(() => {
-    if (questions.value.length > 0) {
-        return
-    }
-    fetchData()
-})
+	if (questions.value.length > 0) {
+		return;
+	}
+	fetchData();
+});
 const fetchURL = computed(() => {
-    if (!route.params.difficulty && !route.params.category) {
-        return `https://opentdb.com/api.php?amount=10`
-    }
-    if (route.params.category && !route.params.difficulty) {
-        return `https://opentdb.com/api.php?amount=10&category=${route.params.category}`
-    }
-    if (route.params.difficulty && !route.params.category) {
-        return `https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}`
-    }
-    if (route.params.category && route.params.difficulty) {
-        return `https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}`
-    }
-})
+	if (!route.params.difficulty && !route.params.category) {
+		return "https://opentdb.com/api.php?amount=10";
+	}
+	if (route.params.category && !route.params.difficulty) {
+		return `https://opentdb.com/api.php?amount=10&category=${route.params.category}`;
+	}
+	if (route.params.difficulty && !route.params.category) {
+		return `https://opentdb.com/api.php?amount=10&difficulty=${route.params.difficulty}`;
+	}
+	if (route.params.category && route.params.difficulty) {
+		return `https://opentdb.com/api.php?amount=10&category=${route.params.category}&difficulty=${route.params.difficulty}`;
+	}
+});
 const fetchData = async () => {
-    let URL = fetchURL.value
-    try {
-        fetch(URL)
-            .then(res => res.json())
-            .then(data => {
-                if (data.response_code === 1) {
-                    loading.value = false
-                    showAlert.value = true
-                    return
-                }
-                questions.value = data.results;
-                loading.value = false;
-            })
-    } catch (error) {
-        showAlert.value = true
-    }
-}
+	const URL = fetchURL.value;
+	try {
+		fetch(URL)
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.response_code === 1) {
+					loading.value = false;
+					showAlert.value = true;
+					return;
+				}
+				questions.value = data.results;
+				loading.value = false;
+			});
+	} catch (error) {
+		showAlert.value = true;
+	}
+};
 
 const goHome = () => {
-    router.push({ name: 'home' })
-}
+	router.push({ name: "home" });
+};
 </script>
 <template>
     <div v-show="!loading">
@@ -75,16 +82,16 @@ const goHome = () => {
                 :page="index + 1" @answer="addScore" @next-page="nextQuestion" />
         </TransitionGroup>
     </div>
-    <div v-if="showAlert" class="w-full mt-32 p-6">
+    <div v-if="showAlert" class="w-full p-6 mt-32">
         <div
-            class="w-full max-w-md mx-auto px-8 py-4 bg-white text-center rounded-lg border border-b-4 border-r-4 border-gray-400">
+            class="w-full max-w-md px-8 py-4 mx-auto text-center bg-white border border-b-4 border-r-4 border-gray-400 rounded-lg">
             <figure class="w-[180px] h-[180px] mx-auto">
                 <img src="/assets/avatar-thinking.png" alt="">
             </figure>
             <h1 class="text-3xl font-light">Sorry,</h1>
             <p class="text-gray-600">The quiz you requested are currently not available.</p>
             <p @click="goHome"
-                class="mt-4 px-4 py-2 text-white font-medium bg-tertiary rounded-lg border border-b-4 border-r-4 border-red-700 hover:cursor-pointer">
+                class="px-4 py-2 mt-4 font-medium text-white border border-b-4 border-r-4 border-red-700 rounded-lg bg-tertiary hover:cursor-pointer">
                 Try another option
             </p>
         </div>
@@ -99,13 +106,13 @@ const goHome = () => {
                         d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                 </svg>
             </div>
-            <div class="text-gray-400 text-xl flex gap-2">
+            <div class="flex gap-2 text-xl text-gray-400">
                 Skip
             </div>
         </div>
     </div>
 
-    <div class="flex justify-center gap-6 mt-10 px-4 py-6">
+    <div class="flex justify-center gap-6 px-4 py-6 mt-10">
         <span>
             🚀 novabyte.dev
         </span>

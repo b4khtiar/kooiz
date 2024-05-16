@@ -1,97 +1,101 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
-import { useTriviaStore } from '../stores/trivia';
-import Loading from '../components/Loading.vue';
+import { ref, computed, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useTriviaStore } from "../stores/trivia";
+import Loading from "@/components/Loading.vue";
 
-const loading = ref(true)
-const route = useRoute()
-const router = useRouter()
-const triviaStore = useTriviaStore()
-const score = ref(route.params.score)
-const categoryNum = ref(route.params.category)
+const loading = ref(true);
+const route = useRoute();
+const router = useRouter();
+const triviaStore = useTriviaStore();
+const score = ref(route.params.score);
+const categoryNum = ref(route.params.category);
 const category = computed(() => {
-    if (!categoryNum.value) {
-        return 'random category'
-    }
-    return triviaStore.categories.find(c => c.id == categoryNum.value)?.name + ' category'
-})
-const difficulty = ref(route.params.difficulty)
+	if (!categoryNum.value) {
+		return "random category";
+	}
+	return `${
+		triviaStore.categories.find((c) => c.id === categoryNum.value)?.name
+	} category`;
+});
+const difficulty = ref(route.params.difficulty);
 const greetings = [
-    {
-        title: 'Excellent!',
-        img: '/assets/trophy.png'
-    },
-    {
-        title: 'Well Done!',
-        img: '/assets/medal.png'
-    },
-    {
-        title: 'Not Bad!',
-        img: '/assets/badge.png'
-    },
-    {
-        title: 'Try Harder!',
-        img: '/assets/silver.png'
-    },
-    {
-        title: 'You Can Always Retry.',
-        img: '/assets/retry.png'
-    },
-]
+	{
+		title: "Excellent!",
+		img: "/assets/trophy.png",
+	},
+	{
+		title: "Well Done!",
+		img: "/assets/medal.png",
+	},
+	{
+		title: "Not Bad!",
+		img: "/assets/badge.png",
+	},
+	{
+		title: "Try Harder!",
+		img: "/assets/silver.png",
+	},
+	{
+		title: "You Can Always Retry.",
+		img: "/assets/retry.png",
+	},
+];
 const greeting = computed(() => {
-    if (score.value > 90) {
-        return greetings[0]
-    } else if (score.value >= 70) {
-        return greetings[1]
-    } else if (score.value >= 50) {
-        return greetings[2]
-    } else if (score.value >= 10) {
-        return greetings[3]
-    } else {
-        return greetings[4]
-    }
-})
+	if (score.value > 90) {
+		return greetings[0];
+	}
+	if (score.value >= 70) {
+		return greetings[1];
+	}
+	if (score.value >= 50) {
+		return greetings[2];
+	}
+	if (score.value >= 10) {
+		return greetings[3];
+	}
+	return greetings[4];
+});
 const goHome = () => {
-    router.push({ name: 'home' })
-}
+	router.push({ name: "home" });
+};
 if (!route.params.difficulty) {
-    difficulty.value = 'mixed'
+	difficulty.value = "mixed";
 }
 const handleShare = async () => {
-    try {
-        await navigator.share({
-            title: 'Check out Kooiz - Fun Trivia Quiz Game',
-            url: window.location.href
-        });
-        console.log("Data was shared successfully");
-    } catch (err) {
-        console.error("Share failed:", err.message);
-    }
-}
+	try {
+		await navigator.share({
+			title: "Check out Kooiz - Fun Trivia Quiz Game",
+			url: window.location.href,
+		});
+		console.log("Data was shared successfully");
+	} catch (err) {
+		console.error("Share failed:", err.message);
+	}
+};
 const showAbout = () => {
-    router.push({ name: 'about' });
-}
+	router.push({ name: "about" });
+};
 
 onMounted(() => {
-    loading.value = false
-})
+	loading.value = false;
+});
 </script>
 
 <template>
     <div class="flex flex-col items-center pt-32">
-        <h1 class="text-4xl text-gray-600 text-center font-bold heartbeat">{{ greeting.title }}</h1>
+        <h1 class="text-4xl font-bold text-center text-gray-600 heartbeat">{{ greeting.title }}</h1>
         <h1 class="text-3xl">Your Score</h1>
         <figure class="h-[196px] p-2">
             <img :src="greeting.img" width="180" class="bounce-top">
         </figure>
-        <h1 class=" text-5xl text-gray-800 font-semibold">{{ score }}</h1>
-        <h1 class="text-center font bold mt-4 px-6">You can answer {{ score }}% questions in {{ category }} with
+        <h1 class="text-5xl font-semibold text-gray-800 ">{{ score }}</h1>
+        <h1 class="px-6 mt-4 text-center font bold">You can answer {{ score }}% questions in {{ category }} with
             {{ difficulty }} difficulty.</h1>
 
         <div class="px-4 my-4">
             <div @click="handleShare"
-                class="w-fit flex gap-4 bg-tertiary text-light font-medium rounded-lg px-6 py-4 border border-b-4 border-r-4 border-rose-700 hover:cursor-pointer">
+                class="flex gap-4 px-6 py-4 font-medium border border-b-4 border-r-4 rounded-lg w-fit bg-tertiary text-light border-rose-700 hover:cursor-pointer">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path fill-rule="evenodd"
@@ -101,14 +105,14 @@ onMounted(() => {
                 </span>
                 <span class="text-lg font-semibold">Share the fun !</span>
             </div>
-            <div class="mt-4  py-3 lg:mt-2 lg:py-2 text-center">
+            <div class="py-3 mt-4 text-center lg:mt-2 lg:py-2">
                 <span>or </span>
                 <span @click="goHome" class="underline hover:text-tertiary hover:cursor-pointer">take another
                     quiz.</span>
             </div>
         </div>
 
-        <div class="flex justify-center gap-6 mt-10 px-4 py-6">
+        <div class="flex justify-center gap-6 px-4 py-6 mt-10">
             <span>
                 🚀 novabyte.dev
             </span>
