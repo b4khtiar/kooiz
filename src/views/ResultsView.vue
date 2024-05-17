@@ -14,9 +14,10 @@ const category = computed(() => {
 	if (!categoryNum.value) {
 		return "random category";
 	}
-	return `${
-		triviaStore.categories.find((c) => c.id === categoryNum.value)?.name
-	} category`;
+	const categoryName = triviaStore.categories.find(
+		(c) => c.id === categoryNum.value,
+	)?.name;
+	return `${categoryName} category`;
 });
 const difficulty = ref(route.params.difficulty);
 const greetings = [
@@ -95,7 +96,7 @@ onMounted(() => {
 
         <div class="px-4 my-4">
             <div @click="handleShare"
-                class="flex gap-4 px-6 py-4 font-medium border border-b-4 border-r-4 rounded-lg w-fit bg-tertiary text-light border-rose-700 hover:cursor-pointer">
+                class="flex gap-4 px-6 py-4 font-medium border border-b-4 border-r-4 border-blue-700 rounded-lg w-fit bg-secondary text-light hover:cursor-pointer">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                         <path fill-rule="evenodd"

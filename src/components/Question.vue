@@ -37,15 +37,15 @@ onMounted(() => {
 </script>
 <template>
     <div class="w-full px-2 pt-24 md:px-0">
-        <div class="w-full max-w-xl mx-auto my-12 border border-b-4 border-r-4 border-gray-400 rounded-lg md:my-6">
-            <div class="flex justify-between px-4 pt-2 text-stone-500">
-                <div class="text-sm"><span class="hidden md:inline">Question</span> {{ page }}</div>
-                <div class="text-sm">{{ decodeHtml(questionData.category) }}</div>
+        <div class="w-full max-w-xl mx-auto my-12 border-0 border-gray-400 rounded-lg md:my-6">
+            <div class="flex flex-col px-4 pt-2 text-sm md:justify-between md:flex-row text-stone-500">
+                <div class="text-center"><span class="hidden md:inline">Question</span> {{ page }}/10</div>
+                <div class="text-center">{{ decodeHtml(questionData.category) }}</div>
             </div>
-            <div class="flex justify-center align-middle h-72 md:h-52">
-                <p class="px-4 my-auto text-xl font-medium leading-relaxed tracking-wide text-center">
+            <div class="flex justify-center py-5 align-middle min-h-64 md:py-24">
+                <div class="px-4 my-auto text-xl font-medium leading-relaxed tracking-wide text-center">
                     <span v-if="!selectedAnswer">{{ decodeHtml(questionData.question) }}</span>
-                <div v-if="selectedAnswer && isCorrect === true" class="flex gap-3 text-3xl text-secondary blink-1">
+                <div v-if="selectedAnswer && isCorrect === true" class="flex gap-2 text-3xl text-secondary blink-1">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-9 h-9">
@@ -56,48 +56,51 @@ onMounted(() => {
 
                     <span>Correct</span>
                 </div>
-                <div v-if="selectedAnswer && isCorrect === false" class="flex gap-3 text-3xl text-tertiary blink-1">
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-9 h-9">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-
-                    <span>Incorrect</span>
+                <div v-if="selectedAnswer && isCorrect === false">
+                    <div class="flex justify-center gap-2 text-3xl text-tertiary blink-1">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-9 h-9">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
+                        <span>incorrect</span>
+                    </div>
+                    <div class="mt-4 text-base">
+                        <p>The correct answer was: {{ questionData.correct_answer }}</p>
+                    </div>
                 </div>
-                </p>
+                </div>
             </div>
         </div>
 
         <div class="w-full max-w-xl min-h-[114px] mx-auto text-gray-600">
             <div v-if="questionData.type === 'boolean' && !selectedAnswer" class="flex justify-center gap-6 ">
                 <div @click="selectAnswer('True')"
-                    class="px-6 py-3 text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    class="px-6 py-3 text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:text-gray-800 hover:border-gray-800 hover:cursor-pointer active:border-gray-800 active:bg-gray-300">
                     <span>TRUE</span>
                 </div>
                 <div @click="selectAnswer('False')"
-                    class="px-6 py-3 text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    class="px-6 py-3 text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:cursor-pointer hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
                     <span>FALSE</span>
                 </div>
             </div>
-            <div v-if="questionData.type === 'multiple' && !selectedAnswer" class="grid justify-center grid-cols-2 gap-2">
+            <div v-if="questionData.type === 'multiple' && !selectedAnswer"
+                class="grid justify-center grid-cols-1 gap-2 md:grid-cols-2">
                 <div v-for="answer, index in options" :key="index" @click="selectAnswer(answer)"
-                    class="px-3 py-3 border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                    class="px-3 py-3 border border-b-4 border-r-4 border-gray-400 rounded-lg group hover:cursor-pointer hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
                     <span>{{ decodeHtml(answer) }}</span>
                 </div>
             </div>
             <div v-if="selectedAnswer" @click="nextPage"
-                class="flex gap-2 px-6 py-3 mx-auto text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg w-fit group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 active:bg-gray-300">
+                class="flex gap-2 px-6 py-3 mx-auto text-xl border border-b-4 border-r-4 border-gray-400 rounded-lg w-fit group hover:text-gray-800 hover:border-gray-800 active:border-gray-800 hover:cursor-pointer active:bg-gray-300">
                 <span>{{ page === 10 ? 'Finish' : 'Next Question' }}</span>
-                <span>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-7 h-7">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </span>
+                <span v-show="page < 10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-7 h-7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
                 </span>
             </div>
         </div>

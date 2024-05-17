@@ -1,6 +1,6 @@
 <template>
   <div class="mt-[124px] px-4">
-    <h1 class="text-5xl">About</h1>
+    <h1 class="text-5xl text-center">About</h1>
     <p class="py-5">KooiZ is a fun trivia game made with Vue.js and Open Trivia DB API.</p>
 
     <p class="mt-8">Visit <a href="https://opentdb.com/">Open TDB</a> for more trivia questions.</p>

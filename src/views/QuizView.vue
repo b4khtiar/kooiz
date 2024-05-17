@@ -98,7 +98,7 @@ const goHome = () => {
     </div>
 
     <div v-show="!loading && questions.length !== 0" class="w-full mt-32 md:mt-24">
-        <div class="flex justify-between px-8 ">
+        <div class="flex justify-center px-8 ">
             <div @click="goHome" class="text-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-8 h-8">
@@ -106,9 +106,9 @@ const goHome = () => {
                         d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                 </svg>
             </div>
-            <div class="flex gap-2 text-xl text-gray-400">
+            <!-- <div class="flex gap-2 text-xl text-gray-400">
                 Skip
-            </div>
+            </div> -->
         </div>
     </div>
 
