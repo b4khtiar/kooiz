@@ -1,140 +1,153 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useTriviaStore } from "../stores/trivia";
-import Loading from "@/components/Loading.vue";
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useTriviaStore } from '../stores/trivia'
+import Loading from '@/components/Loading.vue'
 
-const loading = ref(true);
-const route = useRoute();
-const router = useRouter();
-const triviaStore = useTriviaStore();
-const score = ref(route.params.score);
-const categoryNum = ref(route.params.category);
+const loading = ref(true)
+const route = useRoute()
+const router = useRouter()
+const triviaStore = useTriviaStore()
+const score = ref(route.params.score)
+const categoryNum = ref(route.params.category)
 const category = computed(() => {
 	if (!categoryNum.value) {
-		return "random category";
+		return 'random category'
 	}
-	const categoryName = triviaStore.categories.find(
-		(c) => c.id === categoryNum.value,
-	)?.name;
-	return `${categoryName} category`;
-});
-const difficulty = ref(route.params.difficulty);
+	const category = triviaStore.categories.find(
+		c => c.id === Number(categoryNum.value)
+	)
+	return `${category.name} category`
+})
+const difficulty = ref(route.params.difficulty)
 const greetings = [
 	{
-		title: "Excellent!",
-		img: "/assets/trophy.png",
+		title: 'Excellent!',
+		img: '/assets/trophy.png',
 	},
 	{
-		title: "Well Done!",
-		img: "/assets/medal.png",
+		title: 'Well Done!',
+		img: '/assets/medal.png',
 	},
 	{
-		title: "Not Bad!",
-		img: "/assets/badge.png",
+		title: 'Not Bad!',
+		img: '/assets/badge.png',
 	},
 	{
-		title: "Try Harder!",
-		img: "/assets/silver.png",
+		title: 'Try Harder!',
+		img: '/assets/silver.png',
 	},
 	{
-		title: "You Can Always Retry.",
-		img: "/assets/retry.png",
+		title: 'You Can Always Retry.',
+		img: '/assets/retry.png',
 	},
-];
+]
 const greeting = computed(() => {
 	if (score.value > 90) {
-		return greetings[0];
+		return greetings[0]
 	}
 	if (score.value >= 70) {
-		return greetings[1];
+		return greetings[1]
 	}
 	if (score.value >= 50) {
-		return greetings[2];
+		return greetings[2]
 	}
 	if (score.value >= 10) {
-		return greetings[3];
+		return greetings[3]
 	}
-	return greetings[4];
-});
+	return greetings[4]
+})
 const goHome = () => {
-	router.push({ name: "home" });
-};
+	router.push({ name: 'home' })
+}
 if (!route.params.difficulty) {
-	difficulty.value = "mixed";
+	difficulty.value = 'mixed'
 }
 const handleShare = async () => {
 	try {
 		await navigator.share({
-			title: "Check out Kooiz - Fun Trivia Quiz Game",
+			title: 'Check out Kooiz - Fun Trivia Quiz Game',
 			url: window.location.href,
-		});
-		console.log("Data was shared successfully");
+		})
+		console.log('Data was shared successfully')
 	} catch (err) {
-		console.error("Share failed:", err.message);
+		console.error('Share failed:', err.message)
 	}
-};
+}
 const showAbout = () => {
-	router.push({ name: "about" });
-};
+	router.push({ name: 'about' })
+}
 
 onMounted(() => {
-	loading.value = false;
-});
+	loading.value = false
+})
 </script>
 
 <template>
-    <div class="flex flex-col items-center pt-32">
-        <h1 class="text-4xl font-bold text-center text-gray-600 heartbeat">{{ greeting.title }}</h1>
-        <h1 class="text-3xl">Your Score</h1>
-        <figure class="h-[196px] p-2">
-            <img :src="greeting.img" width="180" class="bounce-top">
-        </figure>
-        <h1 class="text-5xl font-semibold text-gray-800 ">{{ score }}</h1>
-        <h1 class="px-6 mt-4 text-center font bold">You can answer {{ score }}% questions in {{ category }} with
-            {{ difficulty }} difficulty.</h1>
+	<div class="flex flex-col items-center pt-32">
+		<h1 class="text-4xl font-bold text-center text-gray-600 heartbeat">
+			{{ greeting.title }}
+		</h1>
+		<h1 class="text-3xl">Your Score</h1>
+		<figure class="h-[196px] p-2">
+			<img :src="greeting.img" width="180" class="bounce-top" />
+		</figure>
+		<h1 class="text-5xl font-semibold text-gray-800">{{ score }}</h1>
+		<h1 class="px-6 mt-4 text-center font bold">
+			You can answer {{ score }}% questions in {{ category }} with
+			{{ difficulty }} difficulty.
+		</h1>
 
-        <div class="px-4 my-4">
-            <div @click="handleShare"
-                class="flex gap-4 px-6 py-4 font-medium border border-b-4 border-r-4 border-blue-700 rounded-lg w-fit bg-secondary text-light hover:cursor-pointer">
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                        <path fill-rule="evenodd"
-                            d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </span>
-                <span class="text-lg font-semibold">Share the fun !</span>
-            </div>
-            <div class="py-3 mt-4 text-center lg:mt-2 lg:py-2">
-                <span>or </span>
-                <span @click="goHome" class="underline hover:text-tertiary hover:cursor-pointer">take another
-                    quiz.</span>
-            </div>
-        </div>
+		<div class="px-4 my-4">
+			<div
+				@click="handleShare"
+				class="flex gap-4 px-6 py-4 font-medium border border-b-4 border-r-4 border-blue-700 rounded-lg w-fit bg-secondary text-light hover:cursor-pointer">
+				<span>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						class="w-6 h-6">
+						<path
+							fill-rule="evenodd"
+							d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
+							clip-rule="evenodd" />
+					</svg>
+				</span>
+				<span class="text-lg font-semibold">Share the fun !</span>
+			</div>
+			<div class="py-3 mt-4 text-center lg:mt-2 lg:py-2">
+				<span>or </span>
+				<span
+					@click="goHome"
+					class="underline hover:text-tertiary hover:cursor-pointer"
+					>take another quiz.</span
+				>
+			</div>
+		</div>
 
-        <div class="flex justify-center gap-6 px-4 py-6 mt-10">
-            <span>
-                🚀 novabyte.dev
-            </span>
-            <span @click="showAbout" class="underline hover:text-tertiary hover:cursor-pointer">
-                About
-            </span>
-        </div>
-    </div>
+		<div class="flex justify-center gap-6 px-4 py-6 mt-10">
+			<span> 🚀 novabyte.dev </span>
+			<span
+				@click="showAbout"
+				class="underline hover:text-tertiary hover:cursor-pointer">
+				About
+			</span>
+		</div>
+	</div>
 
-    <Loading v-if="loading" />
+	<Loading v-if="loading" />
 </template>
 
 <style scoped>
 .bounce-top {
-    -webkit-animation: bounce-top 0.9s both;
-    animation: bounce-top 0.9s both;
+	-webkit-animation: bounce-top 0.9s both;
+	animation: bounce-top 0.9s both;
 }
 
 .heartbeat {
-    -webkit-animation: heartbeat 1.5s ease-in-out both;
-    animation: heartbeat 1.5s ease-in-out both;
+	-webkit-animation: heartbeat 1.5s ease-in-out both;
+	animation: heartbeat 1.5s ease-in-out both;
 }
 
 /* ----------------------------------------------
@@ -150,123 +163,123 @@ onMounted(() => {
  * ----------------------------------------
  */
 @-webkit-keyframes bounce-top {
-    0% {
-        -webkit-transform: translateY(-45px);
-        transform: translateY(-45px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-        opacity: 1;
-    }
+	0% {
+		-webkit-transform: translateY(-45px);
+		transform: translateY(-45px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+		opacity: 1;
+	}
 
-    24% {
-        opacity: 1;
-    }
+	24% {
+		opacity: 1;
+	}
 
-    40% {
-        -webkit-transform: translateY(-24px);
-        transform: translateY(-24px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	40% {
+		-webkit-transform: translateY(-24px);
+		transform: translateY(-24px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    65% {
-        -webkit-transform: translateY(-12px);
-        transform: translateY(-12px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	65% {
+		-webkit-transform: translateY(-12px);
+		transform: translateY(-12px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    82% {
-        -webkit-transform: translateY(-6px);
-        transform: translateY(-6px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	82% {
+		-webkit-transform: translateY(-6px);
+		transform: translateY(-6px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    93% {
-        -webkit-transform: translateY(-4px);
-        transform: translateY(-4px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	93% {
+		-webkit-transform: translateY(-4px);
+		transform: translateY(-4px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    25%,
-    55%,
-    75%,
-    87% {
-        -webkit-transform: translateY(0px);
-        transform: translateY(0px);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	25%,
+	55%,
+	75%,
+	87% {
+		-webkit-transform: translateY(0px);
+		transform: translateY(0px);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    100% {
-        -webkit-transform: translateY(0px);
-        transform: translateY(0px);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-        opacity: 1;
-    }
+	100% {
+		-webkit-transform: translateY(0px);
+		transform: translateY(0px);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+		opacity: 1;
+	}
 }
 
 @keyframes bounce-top {
-    0% {
-        -webkit-transform: translateY(-45px);
-        transform: translateY(-45px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-        opacity: 1;
-    }
+	0% {
+		-webkit-transform: translateY(-45px);
+		transform: translateY(-45px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+		opacity: 1;
+	}
 
-    24% {
-        opacity: 1;
-    }
+	24% {
+		opacity: 1;
+	}
 
-    40% {
-        -webkit-transform: translateY(-24px);
-        transform: translateY(-24px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	40% {
+		-webkit-transform: translateY(-24px);
+		transform: translateY(-24px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    65% {
-        -webkit-transform: translateY(-12px);
-        transform: translateY(-12px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	65% {
+		-webkit-transform: translateY(-12px);
+		transform: translateY(-12px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    82% {
-        -webkit-transform: translateY(-6px);
-        transform: translateY(-6px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	82% {
+		-webkit-transform: translateY(-6px);
+		transform: translateY(-6px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    93% {
-        -webkit-transform: translateY(-4px);
-        transform: translateY(-4px);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	93% {
+		-webkit-transform: translateY(-4px);
+		transform: translateY(-4px);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    25%,
-    55%,
-    75%,
-    87% {
-        -webkit-transform: translateY(0px);
-        transform: translateY(0px);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	25%,
+	55%,
+	75%,
+	87% {
+		-webkit-transform: translateY(0px);
+		transform: translateY(0px);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    100% {
-        -webkit-transform: translateY(0px);
-        transform: translateY(0px);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-        opacity: 1;
-    }
+	100% {
+		-webkit-transform: translateY(0px);
+		transform: translateY(0px);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+		opacity: 1;
+	}
 }
 
 /* ----------------------------------------------
@@ -282,80 +295,80 @@ onMounted(() => {
  * ----------------------------------------
  */
 @-webkit-keyframes heartbeat {
-    from {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	from {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-transform-origin: center center;
+		transform-origin: center center;
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    10% {
-        -webkit-transform: scale(0.91);
-        transform: scale(0.91);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	10% {
+		-webkit-transform: scale(0.91);
+		transform: scale(0.91);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    17% {
-        -webkit-transform: scale(0.98);
-        transform: scale(0.98);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	17% {
+		-webkit-transform: scale(0.98);
+		transform: scale(0.98);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    33% {
-        -webkit-transform: scale(0.87);
-        transform: scale(0.87);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	33% {
+		-webkit-transform: scale(0.87);
+		transform: scale(0.87);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    45% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	45% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 }
 
 @keyframes heartbeat {
-    from {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transform-origin: center center;
-        transform-origin: center center;
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	from {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-transform-origin: center center;
+		transform-origin: center center;
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    10% {
-        -webkit-transform: scale(0.91);
-        transform: scale(0.91);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	10% {
+		-webkit-transform: scale(0.91);
+		transform: scale(0.91);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    17% {
-        -webkit-transform: scale(0.98);
-        transform: scale(0.98);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	17% {
+		-webkit-transform: scale(0.98);
+		transform: scale(0.98);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 
-    33% {
-        -webkit-transform: scale(0.87);
-        transform: scale(0.87);
-        -webkit-animation-timing-function: ease-in;
-        animation-timing-function: ease-in;
-    }
+	33% {
+		-webkit-transform: scale(0.87);
+		transform: scale(0.87);
+		-webkit-animation-timing-function: ease-in;
+		animation-timing-function: ease-in;
+	}
 
-    45% {
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-animation-timing-function: ease-out;
-        animation-timing-function: ease-out;
-    }
+	45% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-animation-timing-function: ease-out;
+		animation-timing-function: ease-out;
+	}
 }
 </style>
